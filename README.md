@@ -1,2 +1,9 @@
 # projeto_integrador_1
-controle de estoque
+Projeto de controle de estoque.
+
+Integrantes:
+ - Arthur Locce
+ - Maria Clara Zalotini Tomaz
+ - Daniel Uchôa
+ - Henrique Fiamengui 
+ - Isabelle Ormo Crenonini
