@@ -29,7 +29,7 @@ valor_custofixo=(cf/100)*pv
 #cálculo outros custos e rentabilidade
 oc = valor_imposto+valor_comissao+valor_custofixo
 rentabilidade=rb-oc
-rentabilidadePorcem= (rentabilidade/pv)*100
+pct_rent= (rentabilidade/pv)*100
 
 
 #saída
@@ -44,13 +44,13 @@ data = [[ 'A. Preço de Venda', f'{pv:.2f}', f'{((pv/pv)*100):.0f}%'],
 ['H. Rentabilidade (C-G)', f'{rentabilidade:.2f}', f'{((rentabilidade/pv)*100):.0f}%\n']]
 print (tabulate(data, headers=["Descrição", "Valor", "%"], floatfmt=".2f"))
 
-if rentabilidadePorcem > 20:
+if pct_rent > 20:
     print("Lucro Alto!!")
-elif rentabilidadePorcem > 10 and rentabilidadePorcem <= 20:
+elif pct_rent > 10 and pct_rent <= 20:
     print("Lucro médio!")
-elif rentabilidadePorcem > 0 and rentabilidadePorcem <=10:
+elif pct_rent > 0 and pct_rent <=10:
     print("Lucro baixo...")
-elif rentabilidadePorcem == 0:
+elif pct_rent == 0:
     print("Equilíbro.")
 else: 
     print("Prejuízo....")
