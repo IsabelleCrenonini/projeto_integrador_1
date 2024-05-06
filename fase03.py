@@ -10,9 +10,60 @@ conexao = mysql.connector.connect(
 
 print("\nConecctado", conexao)
      
-
  # Criar Cursor
 cursor = conexao.cursor()
+    
+
+def deletar_produto():
+    id_prod=int(input("Digite o código do produto: "))
+    
+    from tabulate import tabulate
+
+    sql_select_Query = "SELECT * FROM estoque WHERE cod_prod={0}".format(id_prod)
+    cursor = conexao.cursor()
+    cursor.execute(sql_select_Query)
+    produtos = cursor.fetchall()
+
+    for row in produtos:
+        print("\nId:", row[0])
+        print("Nome:", row[1])
+        print("Descrição:", row[2])   
+        #print("\n")
+        data = [
+            ["A. Preço de Venda:", f'{row[3]:.2f}', f'{row[4]:.0f}%'],
+            ['B. Custo de Aquisição (Fornecedor)', f'{row[5]:.2f}', f'{row[6]:.0f}%'],
+            ['C. Receita Bruta', f'{row[7]:.2f}', f'{row[8]:.0f}%'],
+            ['D. Custo Fixo/Administrativo', f'{row[9]:.2f}', f'{row[10]:.0f}%'],
+            ['E. Comissão de Vendas', f'{row[11]:.2f}', f'{row[12]:.0f}%'],
+            ['F. Impostos', f'{row[13]:.2f}', f'{row[14]:.0f}%'],
+            ['G. Outros Custos (D+E+F)', f'{row[15]:.2f}', f'{row[16]:.0f}%'],
+            ['H. Rentabilidade (C-G)', f'{row[17]:.2f}', f'{row[18]:.0f}%\n']]
+        print(tabulate(data, headers=["Descrição", "Valor", "%"], floatfmt=".2f"))
+        if (row[17] > 0):
+            if (row[17] <= 10):
+                print("Lucro Baixo")
+            if (row[17] > 10 and row[17] <= 20):
+                print("Lucro médio")
+            if (row[17] > 20):
+                print("Lucro Alto")
+
+        else:
+            if (row[17] == 0):
+                print("Equilíbrio")
+            else:
+                print("Prejuízo")
+
+    confirmar=int(input("\nConfirme o id do produto para sua exclusão: "))
+    if(confirmar==id_prod):
+        apagar_query = "delete FROM estoque WHERE cod_prod={0}".format(confirmar)
+        cursor = conexao.cursor()
+        cursor.execute(apagar_query)
+        conexao.commit() 
+        print("Produto excluído")
+        menu()
+    else:
+        print("Operação cancelada")
+        menu()
 
 def mostrar_produtos():
     from tabulate import tabulate
@@ -143,18 +194,70 @@ def cadastrar_produto():
         print("Prejuízo....")
     menu()
 
+def alterar_produto():
+    id_prod=int(input("Digite o código do produto: "))
+    
+    from tabulate import tabulate
+
+    sql_select_Query = "SELECT * FROM estoque WHERE cod_prod={0}".format(id_prod)
+    cursor = conexao.cursor()
+    cursor.execute(sql_select_Query)
+    produtos = cursor.fetchall()
+
+    for row in produtos:
+        print("\nId:", row[0])
+        print("Nome:", row[1])
+        print("Descrição:", row[2])   
+        #print("\n")
+        data = [
+            ["A. Preço de Venda:", f'{row[3]:.2f}', f'{row[4]:.0f}%'],
+            ['B. Custo de Aquisição (Fornecedor)', f'{row[5]:.2f}', f'{row[6]:.0f}%'],
+            ['C. Receita Bruta', f'{row[7]:.2f}', f'{row[8]:.0f}%'],
+            ['D. Custo Fixo/Administrativo', f'{row[9]:.2f}', f'{row[10]:.0f}%'],
+            ['E. Comissão de Vendas', f'{row[11]:.2f}', f'{row[12]:.0f}%'],
+            ['F. Impostos', f'{row[13]:.2f}', f'{row[14]:.0f}%'],
+            ['G. Outros Custos (D+E+F)', f'{row[15]:.2f}', f'{row[16]:.0f}%'],
+            ['H. Rentabilidade (C-G)', f'{row[17]:.2f}', f'{row[18]:.0f}%\n']]
+        print(tabulate(data, headers=["Descrição", "Valor", "%"], floatfmt=".2f"))
+        if (row[17] > 0):
+            if (row[17] <= 10):
+                print("Lucro Baixo")
+            if (row[17] > 10 and row[17] <= 20):
+                print("Lucro médio")
+            if (row[17] > 20):
+                print("Lucro Alto")
+
+        else:
+            if (row[17] == 0):
+                print("Equilíbrio")
+            else:
+                print("Prejuízo")
+
+    
+   
+    if(confirmar==id_prod):
+        apagar_query = "delete FROM estoque WHERE cod_prod={0}".format(confirmar)
+        cursor = conexao.cursor()
+        cursor.execute(apagar_query)
+        conexao.commit() 
+        print("Produto excluído")
+        menu()
+
 def menu():
 
     print("\n-----MENU-----\n")
     print("DIGITE 1 PARA CADASTRAR UM PRODUTO")
     print("DIGITE 2 PARA VER SEUS PRODUTOS CADASTRADOS")
-    print("DIGITE 3 PARA SAIR")
+    print("DIGITE 3 EXCLUIR UM PRODUTOS")
+    print("DIGITE 4 PARA SAIR")
     numero_digitado=int(input(" "))
     if(numero_digitado==1):
         cadastrar_produto()
     if(numero_digitado==2):
         mostrar_produtos()
     if(numero_digitado==3):
+        deletar_produto()
+    if(numero_digitado==4):
         sys.exit()
     else:
         print("Essa opção não existe")
