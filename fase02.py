@@ -4,9 +4,9 @@ import oracledb
 
 try:
  conexao = oracledb.connect(
- user="ARTHUR",
- password="Eunasciem",
- dsn="192.168.0.15/XEPDB1")
+ user="ISA",
+ password="isabelle",
+ dsn="localhost/XEPDB1")
 except Exception as erro:
  print ('Erro em conexão', erro)
 else:
